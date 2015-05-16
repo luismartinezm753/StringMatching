@@ -17,6 +17,7 @@ public class StringParser {
                 BufferedWriter writer = new BufferedWriter(new FileWriter("Datos.txt"));
                 String strLine;
                 while ((strLine = br.readLine()) != null) {
+                    strLine=strLine.toLowerCase();
                     for (int j = 0; j < SPECIAL_CHARS.length; i++) {
                         strLine=strLine.replaceAll(SPECIAL_CHARS[j],"");
                     }
