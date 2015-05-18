@@ -16,10 +16,11 @@ public class SuffixNode {
         childs=new ArrayList<SuffixNode>();
     }
     public void addChild(SuffixNode nodo){
+        childs.add(nodo);
 
     }
     public void addEdge(SuffixEdge edge){
-
+        childEdges.add(edge);
     }
 
     public ArrayList<SuffixNode> getChilds() {
@@ -44,5 +45,23 @@ public class SuffixNode {
      */
     public SuffixNode getNode(int i){
         return childs.get(i);
+    }
+
+    public boolean isLeaf() {
+        return childs.isEmpty();
+    }
+
+    /**
+     * indica si un caracter esta en algun arco del nodo y entrega ese arco
+     * @param s un caracter
+     * @return Retorna el arco que contiene ese caracter
+     */
+    public SuffixEdge containsChar(char s){
+        for (SuffixEdge edge : childEdges){
+            if (edge.getS()==s){
+                return edge;
+            }
+        }
+        return null;
     }
 }

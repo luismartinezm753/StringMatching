@@ -6,16 +6,16 @@
  * Son los arcos del suffixTrie, son los que almacenan un caracter en especifico.
  */
 public class SuffixEdge {
-    private String s;
+    private char s;
 
-    public SuffixEdge(String s){
+    public SuffixEdge(char s){
         this.s=s;
     }
-    public String getS() {
+    public char getS() {
         return s;
     }
 
-    public void setS(String s) {
+    public void setS(char s) {
         this.s = s;
     }
 }

@@ -5,14 +5,43 @@ import java.util.ArrayList;
  */
 public class SuffixTrie {
     SuffixNode root;
+    public static final char SPECIAL_CHAR='$';
     public SuffixTrie(){
+
         root=new SuffixNode();
     }
-    public boolean search(String s){
-        return false;
+    public boolean search(String s, SuffixNode nodo, boolean flag){
+        if (flag==true && nodo.getEdge(0).getS()==SPECIAL_CHAR){
+            return flag;
+        }else{
+            SuffixEdge edge=nodo.containsChar(s.charAt(0));
+            if (s.charAt(0)==edge.getS()){
+                int index=nodo.getChildEdges().indexOf(edge);
+                return flag && search(s.substring(1,s.length()),nodo.getNode(index),flag);
+            }else{
+                flag=false;
+                return false;
+            }
+        }
     }
-    public void insert(String s){
-
+    public void insert(String s, SuffixNode nodo){
+        SuffixEdge edge=nodo.containsChar(s.charAt(0));
+        int index=nodo.getChildEdges().indexOf(edge);
+        if (edge == null) {
+            SuffixNode nodeActual=nodo;
+            SuffixNode nodeAnterior=nodo;
+            for (int i = 0; i < s.length(); i++) {
+                SuffixNode newNode=new SuffixNode();
+                nodeActual.addChild(newNode);
+                nodeActual.addEdge(new SuffixEdge(s.charAt(i)));
+                nodeAnterior=nodeActual;
+                nodeActual=newNode;
+            }
+            nodeActual.addChild(new SuffixNode());
+            nodeActual.addEdge(new SuffixEdge(SPECIAL_CHAR));
+        }else{
+            insert(s.substring(1,s.length()),nodo.getNode(index));
+        }
     }
 
     /**
