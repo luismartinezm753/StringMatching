@@ -1,3 +1,5 @@
+package SuffixTrie;
+
 import java.util.ArrayList;
 
 /**
