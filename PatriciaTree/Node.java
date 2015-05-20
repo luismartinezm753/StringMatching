@@ -76,9 +76,6 @@ public class Node {
         return children.isEmpty();
     }
 
-    public void addPosition(int position){
-        positions.add(position);
-    }
     public void deletePosition(int position){
         positions.remove(position);
     }

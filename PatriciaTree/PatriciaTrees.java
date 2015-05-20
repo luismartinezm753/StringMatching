@@ -85,7 +85,7 @@ public class PatriciaTrees {
             Edge emptyEdge=new Edge("");
             nodo.addNode(leaf);
             nodo.addEdge(emptyEdge);
-            emptyEdge.setPositions(nodo.getPositions);
+            leaf.setPositions(nodo.getPositions());
             nodo.setPositions(null);
             Edge newEdge=new Edge(insertar);
             nodo.addNode(newNodo);
