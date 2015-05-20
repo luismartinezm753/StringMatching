@@ -60,11 +60,19 @@ public class Node {
         childrenEdges.add(e);
     }
 
+    public void addPosition(int i){
+        positions.add(i);
+    }
+
     public void removeNode(int index){
         children.remove(index);
     }
 
     public void removeEdge(int index){
         childrenEdges.remove(index);
+    }
+
+    public boolean isLeaf(){
+        return children.isEmpty();
     }
 }
