@@ -2,7 +2,6 @@
 package PatriciaTree;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by milenkotomic on 20-05-15.
@@ -61,12 +60,20 @@ public class Node {
         childrenEdges.add(e);
     }
 
+    public void addPosition(int i){
+        positions.add(i);
+    }
+
     public void removeNode(int index){
         children.remove(index);
     }
 
     public void removeEdge(int index){
         childrenEdges.remove(index);
+    }
+
+    public boolean isLeaf(){
+        return children.isEmpty();
     }
 
     public void addPosition(int position){
