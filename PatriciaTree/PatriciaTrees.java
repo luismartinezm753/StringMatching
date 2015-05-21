@@ -27,7 +27,7 @@ public class PatriciaTrees {
                 node.addPosition(position);
             }
             else{
-                reinsert(s, path, position, root);
+                reinsert(s, path, position, root,"");
             }
             return;
         }
@@ -42,7 +42,7 @@ public class PatriciaTrees {
                 Node child = node.getChildrenPosition(index);
                 String pathToLeaf = getPathToLeaf(child);
                 String pPrime = path + edge.getLabel() + pathToLeaf;
-                reinsert(p, pPrime, position, root);
+                reinsert(p, pPrime, position, root,"");
                 return;
             }
             else{
@@ -54,7 +54,7 @@ public class PatriciaTrees {
         }
         String pathToLeaf = getPathToLeaf(node);
         String pPrime = path + pathToLeaf;
-        reinsert(s, pPrime, position, root);
+        reinsert(s, pPrime, position, root,"");
     }
 
     private String getPathToLeaf(Node child) {
@@ -107,26 +107,50 @@ public class PatriciaTrees {
     }
 
 
-    public void reinsert(String insertar, String acumulado, int position, Node nodo){
-        String prefix=greatestCommonPrefix(insertar,acumulado);
-        String sufix=insertar.substring(prefix.length() - 1, insertar.length());
-        Edge edge=nodo.containsString(prefix);
-        if (edge == null) {
-            Node newNodo=new Node();
-            Node leaf=new Node();
-            Edge emptyEdge=new Edge("");
-            nodo.addNode(leaf);
-            nodo.addEdge(emptyEdge);
-            leaf.setPositions(nodo.getPositions());
-            nodo.setPositions(null);
-            Edge newEdge=new Edge(insertar);
-            nodo.addNode(newNodo);
-            nodo.addEdge(newEdge);
-            newNodo.addPosition(position);
-        }else{
-
+    public void reinsert(String p, String pPrime, int position, Node node, String acumulado){
+        String prefix=greatestCommonPrefix(p, pPrime);
+        String sufix=p.substring(prefix.length() - 1, p.length());
+        ArrayList<Edge> edges = node.getChildrenEdges();
+        for (Edge edge: edges) {
+            String label = edge.getLabel();
+            String labelPrefix = greatestCommonPrefix(label, prefix);
+            if (labelPrefix.equals(""))
+                continue;
+            if (prefix.equals(label)) {
+                //Inserto el sufijo que me falta
+                Node newNode = new Node();
+                Edge newEdge = new Edge(sufix);
+                newNode.addPosition(position);
+                node.addEdge(newEdge);
+                node.addNode(newNode);
+                addFinalNode(newNode);
+                return;
+            } else if(prefix.startsWith(acumulado.concat(label))) {
+                reinsert(p,pPrime,position,node.getChildrenPosition(edges.indexOf(edge)),acumulado.concat(label));
+            }else if(label.startsWith(prefix) && prefix.length()<label.length()){//hago split
+                String division=label.substring(0,label.indexOf(prefix));
+                String end=label.substring(label.indexOf(prefix),label.length());
+                Node newNode = new Node();
+                Edge newEdge = new Edge(end);
+                Node child=node.getChildrenPosition(edges.indexOf(edge));
+                edge.setLabel(division);
+                node.removeNode(edges.indexOf(edge));
+                node.addNode(newNode);
+                newNode.addEdge(newEdge);
+                newNode.addNode(child);
+                newNode.addPosition(position);
+                addFinalNode(newNode);
+                return;
+            }
         }
-
+        if (prefix.equals("")){
+            Node newNode = new Node();
+            Edge newEdge = new Edge(p);
+            newNode.addPosition(position);
+            node.addEdge(newEdge);
+            node.addNode(newNode);
+            addFinalNode(newNode);
+        }
     }
     public String greatestCommonPrefix(String a, String b) {
         int minLength = Math.min(a.length(), b.length());
@@ -136,5 +160,11 @@ public class PatriciaTrees {
             }
         }
         return a.substring(0, minLength);
+    }
+    public void addFinalNode(Node node){
+        Node leaf = new Node();
+        Edge emptyEdge = new Edge("");
+        node.addEdge(emptyEdge);
+        node.addNode(leaf);
     }
 }

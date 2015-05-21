@@ -80,13 +80,4 @@ public class Node {
         positions.remove(position);
     }
 
-    public Edge containsString(String s){
-        for (Edge edge : childrenEdges){
-            if (edge.getLabel().equals(s) || edge.getLabel().startsWith(s)){
-                return edge;
-            }
-        }
-        return null;
-
-    }
 }
