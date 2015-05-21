@@ -16,12 +16,12 @@ public class PatriciaTrees {
     /**
      *
      * @param node nodo que se esta visitando
-     * @param s substring de p que queda por buscar
      * @param p string completo a insertar
+     * @param s substring de p que queda por buscar
+     * @param path string que se ha formado en el recorrido del arbol
      * @param position posicion de p en el arreglo de strings
      */
-
-    public void insert(Node node, String s, String p, String path, int position){
+    public void insert(Node node, String p, String s, String path, int position){
         if (node.isLeaf()) {
             if (s.equals("")) {
                 node.addPosition(position);
@@ -42,7 +42,7 @@ public class PatriciaTrees {
                 Node child = node.getChildrenPosition(index);
                 String pathToLeaf = getPathToLeaf(child);
                 String pPrime = path + edge.getLabel() + pathToLeaf;
-                reinsert(s, pPrime, position, root);
+                reinsert(p, pPrime, position, root);
                 return;
             }
             else{
@@ -55,11 +55,7 @@ public class PatriciaTrees {
         String pathToLeaf = getPathToLeaf(node);
         String pPrime = path + pathToLeaf;
         reinsert(s, pPrime, position, root);
-
-
     }
-
-
 
     private String getPathToLeaf(Node child) {
         Node n = child;
@@ -72,9 +68,45 @@ public class PatriciaTrees {
 
     }
 
-    public boolean search(Node nodo, String s){
-        return true;
+    /**
+     *
+     * @param node nodo actual
+     * @param p string a buscar
+     * @param s substring que queda por buscar
+     * @param path string que se ha formado al recorrer el arbol
+     * @return true si al llegar a una hoja path es igual a p
+     */
+    public boolean search(Node node, String p, String s, String path){
+        if (node.isLeaf()){
+            return p.equals(path);
+        }
+        else{
+            if (p.equals(path))
+                return false;
+        }
+
+        ArrayList<Edge> edges = node.getChildrenEdges();
+        for (Edge edge: edges){
+            String label = edge.getLabel();
+            String prefix = greatestCommonPrefix(label, s);
+            if (prefix.equals(""))
+                continue;
+            if (prefix.equals(label)){
+                int index = edges.indexOf(edge);
+                Node child = node.getChildrenPosition(index);
+                s = s.substring(s.length() - prefix.length(), s.length());
+                path = path + label;
+                return search(child, p, s, path);
+            }
+            else{
+                return false;
+            }
+        }
+        return false;
+
     }
+
+
     public void reinsert(String insertar, String acumulado, int position, Node nodo){
         String prefix=greatestCommonPrefix(insertar,acumulado);
         String sufix=insertar.substring(prefix.length() - 1, insertar.length());
