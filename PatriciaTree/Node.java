@@ -68,6 +68,10 @@ public class Node {
         children.remove(index);
     }
 
+    public void replaceNode(int index, Node newNode){
+        children.set(index,newNode);
+    }
+
     public void removeEdge(int index){
         childrenEdges.remove(index);
     }

@@ -143,7 +143,8 @@ public class PatriciaTrees {
                 Edge newEdge=new Edge(sufix);
                 Edge newEdge2=new Edge(endLabel);
                 edge.setLabel(prefixP);
-                node.removeNode(edges.indexOf(edge));
+                //node.removeNode(edges.indexOf(edge));
+                node.replaceNode(edges.indexOf(edge),newNode);
                 node.addNode(newNode);
                 newNode.addNode(child);
                 newNode.addEdge(newEdge2);
