@@ -50,7 +50,8 @@ public class PatriciaTrees {
             else{
                 int index = edges.indexOf(edge);
                 path = path + label;
-                insert(node.getChildrenPosition(index), s.substring(prefix.length(), s.length()), p, path, position);
+                //insert(node.getChildrenPosition(index), s.substring(prefix.length(), s.length()), p, path, position);
+                insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
                 return;
             }
         }
@@ -132,6 +133,7 @@ public class PatriciaTrees {
             }else if(label.startsWith(prefix) && prefix.length()<label.length()){//hago split
                 String split=label.substring(prefix.length(),label.length());
                 Node newNode = new Node();
+                Node auxNode=new Node();
                 Edge newEdge = new Edge(sufix);
                 Edge splitEdge=new Edge(split);
                 Node child=node.getChildrenPosition(edges.indexOf(edge));
@@ -141,6 +143,7 @@ public class PatriciaTrees {
                 newNode.addEdge(newEdge);
                 newNode.addEdge(splitEdge);
                 newNode.addNode(child);
+                newNode.addNode(auxNode);
                 newNode.addPosition(position);
                 //addFinalNode(newNode);
                 return;
