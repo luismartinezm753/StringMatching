@@ -117,18 +117,21 @@ public class PatriciaTrees {
 
 
     public void reinsert_aux(String prefix, String sufix, int position, Node node, String acumulado){
+        boolean insert=false;
         if (node.isLeaf()){
             Edge newEdge=new Edge(sufix);
             Node newNode= new Node();
             newNode.addPosition(position);
             node.addEdge(newEdge);
             node.addNode(newNode);
-            //addFinalNode(node);
+            insert=true;
+            //addFinalNode(node); falta arreglar esto
         }
+        String labelPrefix="";
         ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges) {
             String label = edge.getLabel();
-            String labelPrefix = greatestCommonPrefix(label, prefix);
+            labelPrefix = greatestCommonPrefix(label, prefix);
             if (labelPrefix.equals("")){
                 continue;
             }
@@ -145,63 +148,25 @@ public class PatriciaTrees {
                 edge.setLabel(prefixP);
                 //node.removeNode(edges.indexOf(edge));
                 node.replaceNode(edges.indexOf(edge),newNode);
-                node.addNode(newNode);
+                //node.addNode(newNode);
                 newNode.addNode(child);
                 newNode.addEdge(newEdge2);
                 newNode.addNode(newNode2);
                 newNode.addEdge(newEdge);
+                insert=true;
             }else{
                 /*Bajar*/
+                insert=true;
                 reinsert_aux(prefix.substring(label.length(), prefix.length()), sufix, position, node.getChildrenPosition(edges.indexOf(edge)), acumulado.concat(label));
             }
         }
-        /*
-        String prefix=greatestCommonPrefix(prefix, sufix);
-        String sufix=prefix.substring(prefix.length(), prefix.length());
-        ArrayList<Edge> edges = node.getChildrenEdges();
-        for (Edge edge: edges) {
-            String label = edge.getLabel();
-            String labelPrefix = greatestCommonPrefix(label, prefix);
-            if (labelPrefix.equals(""))
-                continue;
-            if (prefix.equals(label)) {
-                //Inserto el sufijo que me falta
-                Node newNode = new Node();
-                Edge newEdge = new Edge(sufix);
-                newNode.addPosition(position);
-                node.addEdge(newEdge);
-                node.addNode(newNode);
-                addFinalNode(newNode);
-                return;
-            } else if(prefix.startsWith(acumulado.concat(label))) {
-                reinsert_aux(prefix,sufix,position,node.getChildrenPosition(edges.indexOf(edge)),acumulado.concat(label));
-            }else if(label.startsWith(prefix) && prefix.length()<label.length()){//hago split
-                String split=label.substring(prefix.length(),label.length());
-                Node newNode = new Node();
-                Node auxNode=new Node();
-                Edge newEdge = new Edge(sufix);
-                Edge splitEdge=new Edge(split);
-                Node child=node.getChildrenPosition(edges.indexOf(edge));
-                edge.setLabel(prefix);
-                node.removeNode(edges.indexOf(edge));
-                node.addNode(newNode);
-                newNode.addEdge(newEdge);
-                newNode.addEdge(splitEdge);
-                newNode.addNode(child);
-                newNode.addNode(auxNode);
-                newNode.addPosition(position);
-                //addFinalNode(newNode);
-                return;
-            }
-        }
-        if (prefix.equals("")){
-            Node newNode = new Node();
-            Edge newEdge = new Edge(prefix);
+        if (!insert){
+            Edge newEdge=new Edge(prefix);
+            Node newNode= new Node();
             newNode.addPosition(position);
             node.addEdge(newEdge);
             node.addNode(newNode);
-            //addFinalNode(newNode);
-        }*/
+        }
     }
     public String greatestCommonPrefix(String a, String b) {
         int minLength = Math.min(a.length(), b.length());

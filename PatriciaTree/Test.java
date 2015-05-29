@@ -12,8 +12,8 @@ public class Test {
         words.add("hola");
         words.add("hoja");
         words.add("hole");
-        //words.add("hojame");
-        //words.add("un");
+        words.add("hojame");
+        words.add("un");
         //words.add("facasdfs");
         //words.add("faces");
         for (String word : words){
