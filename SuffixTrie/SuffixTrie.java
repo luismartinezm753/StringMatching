@@ -7,44 +7,46 @@ import java.util.ArrayList;
  */
 public class SuffixTrie {
     SuffixNode root;
+    SuffixNode lastMark;
+    ArrayList<SuffixLinks> links;
     public static final char SPECIAL_CHAR='$';
     public SuffixTrie(){
-
         root=new SuffixNode();
+        lastMark=root;
+        links=new ArrayList<SuffixLinks>();
     }
-    public boolean search(String s, SuffixNode nodo, boolean flag){
-        if (flag==true && nodo.getEdge(0).getS()==SPECIAL_CHAR){
-            return flag;
-        }else{
-            SuffixEdge edge=nodo.containsChar(s.charAt(0));
-            if (s.charAt(0)==edge.getS()){
-                int index=nodo.getChildEdges().indexOf(edge);
-                return flag && search(s.substring(1,s.length()),nodo.getNode(index),flag);
-            }else{
-                flag=false;
-                return false;
-            }
-        }
+
+    public ArrayList<SuffixLinks> getLinks() {
+        return links;
     }
-    public void insert(String s, SuffixNode nodo){
-        SuffixEdge edge=nodo.containsChar(s.charAt(0));
-        int index=nodo.getChildEdges().indexOf(edge);
-        if (edge == null) {
-            SuffixNode nodeActual=nodo;
-            SuffixNode nodeAnterior=nodo;
-            for (int i = 0; i < s.length(); i++) {
-                SuffixNode newNode=new SuffixNode();
-                nodeActual.addChild(newNode);
-                nodeActual.addEdge(new SuffixEdge(s.charAt(i)));
-                nodeAnterior=nodeActual;
-                nodeActual=newNode;
-            }
-            nodeActual.addChild(new SuffixNode());
-            nodeActual.addEdge(new SuffixEdge(SPECIAL_CHAR));
-        }else{
-            insert(s.substring(1,s.length()),nodo.getNode(index));
-        }
+
+    public void setLinks(ArrayList<SuffixLinks> links) {
+        this.links = links;
     }
+    public void addLink(SuffixLinks link){
+        links.add(link);
+    }
+    public SuffixNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(SuffixNode root) {
+        this.root = root;
+    }
+    public SuffixNode getLastMark() {
+        return lastMark;
+    }
+
+    public void setLastMark(SuffixNode lastMark) {
+        this.lastMark = lastMark;
+    }
+    public boolean search(SuffixNode node, String p, String s, String path){
+        return false;
+    }
+    public void insert(SuffixNode node, String p, String s, String path, int position){
+
+    }
+
 
     /**
      * Genera todos los sufijos de un string

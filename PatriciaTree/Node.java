@@ -52,6 +52,10 @@ public class Node {
         return childrenEdges.get(index);
     }
 
+    public int getIndexPosition(int index){
+        return positions.get(index);
+    }
+
     public void addNode(Node n){
         children.add(n);
     }

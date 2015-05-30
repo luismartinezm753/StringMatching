@@ -12,6 +12,7 @@ public class PatriciaTrees {
 
 
     public PatriciaTrees(){
+
         root=new Node();
     }
 
@@ -50,7 +51,6 @@ public class PatriciaTrees {
             else{
                 int index = edges.indexOf(edge);
                 path = path + label;
-                //insert(node.getChildrenPosition(index), s.substring(prefix.length(), s.length()), p, path, position);
                 insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
                 return;
             }
@@ -121,7 +121,13 @@ public class PatriciaTrees {
         if (node.isLeaf()){
             Edge newEdge=new Edge(sufix);
             Node newNode= new Node();
+            Node finalNode=new Node();
+            Edge finalEdge=new Edge("");
             newNode.addPosition(position);
+            node.addNode(finalNode);
+            node.addEdge(finalEdge);
+            finalNode.setPositions((ArrayList<Integer>) node.getPositions().clone());
+            node.setPositions(new ArrayList<Integer>());
             node.addEdge(newEdge);
             node.addNode(newNode);
             insert=true;
@@ -137,18 +143,15 @@ public class PatriciaTrees {
             }
             if (!labelPrefix.equals(label)){
                 /*Hacer Split*/
-                String prefixP=greatestCommonPrefix(label,prefix);
+                String prefixP=greatestCommonPrefix(label, prefix);
                 String endLabel=label.substring(prefixP.length(),label.length());
-                //String endP=prefix.substring(prefixP.length(), prefix.length());
                 Node newNode=new Node();
                 Node newNode2=new Node();
                 Node child=node.getChildrenPosition(edges.indexOf(edge));
                 Edge newEdge=new Edge(sufix);
                 Edge newEdge2=new Edge(endLabel);
                 edge.setLabel(prefixP);
-                //node.removeNode(edges.indexOf(edge));
                 node.replaceNode(edges.indexOf(edge),newNode);
-                //node.addNode(newNode);
                 newNode.addNode(child);
                 newNode.addEdge(newEdge2);
                 newNode.addNode(newNode2);
@@ -190,12 +193,5 @@ public class PatriciaTrees {
 
     public void setRoot(Node root) {
         this.root = root;
-    }
-    public String printTree(Node node, int index){
-        if (node.isLeaf()){
-            return "";
-        }else{
-            return node.getEdgePosition(index).getLabel()+printTree(node.getChildrenPosition(index),index);
-        }
     }
 }
