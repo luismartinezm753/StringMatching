@@ -121,17 +121,19 @@ public class PatriciaTrees {
         if (node.isLeaf()){
             Edge newEdge=new Edge(sufix);
             Node newNode= new Node();
-            Node finalNode=new Node();
-            Edge finalEdge=new Edge("");
             newNode.addPosition(position);
-            node.addNode(finalNode);
-            node.addEdge(finalEdge);
-            finalNode.setPositions((ArrayList<Integer>) node.getPositions().clone());
             node.setPositions(new ArrayList<Integer>());
             node.addEdge(newEdge);
             node.addNode(newNode);
             insert=true;
-            //addFinalNode(node); falta arreglar esto
+            if (!sufix.equals("") && !acumulado.equals("")){
+                Edge finalEdge=new Edge("");
+                Node finalNode=new Node();
+                node.addEdge(finalEdge);
+                node.addNode(finalNode);
+                finalNode.setPositions((ArrayList<Integer>) node.getPositions().clone());
+            }
+            return;
         }
         String labelPrefix="";
         ArrayList<Edge> edges = node.getChildrenEdges();
@@ -156,6 +158,7 @@ public class PatriciaTrees {
                 newNode.addEdge(newEdge2);
                 newNode.addNode(newNode2);
                 newNode.addEdge(newEdge);
+                newNode.addPosition(position);
                 insert=true;
             }else{
                 /*Bajar*/
