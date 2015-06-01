@@ -1,3 +1,5 @@
+package Automaton;
+
 /**
  * Created by luism on 16-05-15.
  */

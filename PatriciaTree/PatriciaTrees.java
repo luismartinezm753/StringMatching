@@ -79,33 +79,37 @@ public class PatriciaTrees {
      * @param path string que se ha formado al recorrer el arbol
      * @return true si al llegar a una hoja path es igual a p
      */
-    public boolean search(Node node, String p, String s, String path){
+    public ArrayList<Integer> search(Node node, String p, String s, String path){
         if (node.isLeaf()){
-            return p.equals(path);
+            if (p.equals(path))
+                return node.getPositions();
+            else
+                return new ArrayList<Integer>();
         }
-        else{
+        /*else{
             if (p.equals(path))
                 return false;
-        }
+        }*/
 
         ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges){
             String label = edge.getLabel();
             String prefix = greatestCommonPrefix(label, s);
-            if (prefix.equals(""))
-                continue;
-            if (prefix.equals(label)){
+            if (prefix.equals(label)) {
                 int index = edges.indexOf(edge);
                 Node child = node.getChildrenPosition(index);
-                s = s.substring(s.length() - prefix.length(), s.length());
+                s = s.substring(prefix.length(), s.length());
                 path = path + label;
                 return search(child, p, s, path);
             }
-            else{
+            if (prefix.equals(""))
+                continue;
+
+            /*else{
                 return false;
-            }
+            }*/
         }
-        return false;
+        return new ArrayList<Integer>();
 
     }
     public void reinsert(String p, String pPrime, int position){
