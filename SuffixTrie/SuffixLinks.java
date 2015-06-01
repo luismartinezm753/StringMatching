@@ -1,28 +1,30 @@
 package SuffixTrie;
 
+import PatriciaTree.Node;
+
 /**
  * Created by luism on 29-05-15.
  */
 public class SuffixLinks {
 
-    private SuffixNode init;
-    private SuffixNode end;
-    public SuffixLinks(SuffixNode init,SuffixNode end){
+    private Node init;
+    private Node end;
+    public SuffixLinks(Node init, Node end){
         this.init=init;
         this.end=end;
     }
-    public SuffixNode getInit() {
+    public Node getInit() {
         return init;
     }
 
-    public void setInit(SuffixNode init) {
+    public void setInit(Node init) {
         this.init = init;
     }
-    public SuffixNode getEnd() {
+    public Node getEnd() {
         return end;
     }
 
-    public void setEnd(SuffixNode end) {
+    public void setEnd(Node end) {
         this.end = end;
     }
 }

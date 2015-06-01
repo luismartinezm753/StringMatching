@@ -126,7 +126,6 @@ public class PatriciaTrees {
             Edge newEdge=new Edge(sufix);
             Node newNode= new Node();
             newNode.addPosition(position);
-            node.setPositions(new ArrayList<Integer>());
             node.addEdge(newEdge);
             node.addNode(newNode);
             insert=true;
@@ -137,6 +136,7 @@ public class PatriciaTrees {
                 node.addNode(finalNode);
                 finalNode.setPositions((ArrayList<Integer>) node.getPositions().clone());
             }
+            node.setPositions(new ArrayList<Integer>());
             return;
         }
         String labelPrefix="";
@@ -162,7 +162,7 @@ public class PatriciaTrees {
                 newNode.addEdge(newEdge2);
                 newNode.addNode(newNode2);
                 newNode.addEdge(newEdge);
-                newNode.addPosition(position);
+                newNode2.addPosition(position);
                 insert=true;
             }else{
                 /*Bajar*/
