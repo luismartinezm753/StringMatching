@@ -13,7 +13,6 @@ public class Main {
     static Random rand = new Random();
     public static int randInt(int min, int max) {
         int randomNum = rand.nextInt((max - min) + 1) + min;
-
         return randomNum;
     }
     static String[] SPECIAL_CHARS={"\\,","\\.","\\:","\\;","\\{","\\}","\\[","\\]","\\!","\\¡","\\?","\\¿","\n","\\&","\\#","\\$"};
@@ -23,7 +22,6 @@ public class Main {
         String strLine;
         int i=0;
         ArrayList<String> allWords=new ArrayList<>();
-        ArrayList<String> searchWords=new ArrayList<>();
         while ((strLine = br.readLine()) != null) {
             strLine=strLine.toLowerCase();
             for (int j = 0; j < SPECIAL_CHARS.length; j++) {
@@ -40,10 +38,17 @@ public class Main {
             i++;
         }
         long time_end = System.currentTimeMillis();
+        long total_search=System.currentTimeMillis();
         for (int j = 0; j < allWords.size() / 10; j++) {
-            searchWords.add(allWords.get(randInt(0,allWords.size()-1)));
+            long search_time=System.currentTimeMillis();
+            String s = allWords.get(randInt(0, allWords.size() - 1));
+            patricia.search(patricia.getRoot(), s, s,"");
+            long search_timeFinal=System.currentTimeMillis();
+            total_search=+(search_timeFinal-search_time);
+            System.out.println("Buscar "+s+" demoro "+(search_timeFinal-search_time)+" milisegundos");
         }
-        System.out.println("the task has taken "+ ( time_end - time_start ) +" milliseconds");
+        System.out.println("Buscar en total demoro: "+total_search);
+        System.out.println("insertar demoro: "+ ( time_end - time_start ) +" milisegundos");
         br.close();
     }
 }
