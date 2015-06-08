@@ -15,7 +15,8 @@ public class Main {
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;
     }
-    static String[] SPECIAL_CHARS={"\\,","\\.","\\:","\\;","\\{","\\}","\\[","\\]","\\!","\\¡","\\?","\\¿","\n","\\&","\\#","\\$"};
+    public static final int TICKS=1000;
+    static String[] SPECIAL_CHARS={"\\-,\\',\\,","\\.","\\:","\\;","\\{","\\}","\\[","\\]","\\!","\\¡","\\?","\\¿","\n","\\&","\\#","\\$"};
     public static void main(String[] args) throws IOException {
         PatriciaTrees patricia=new PatriciaTrees();
         BufferedReader br = new BufferedReader(new FileReader("003ssb.txt"));
@@ -33,6 +34,7 @@ public class Main {
             }
         }
         long time_start = System.currentTimeMillis();
+        System.out.println("Inicio Insert");
         for (String s :allWords){
             patricia.insert(patricia.getRoot(),s,s,"",i);
             i++;
@@ -40,12 +42,12 @@ public class Main {
         long time_end = System.currentTimeMillis();
         long total_search=System.currentTimeMillis();
         for (int j = 0; j < allWords.size() / 10; j++) {
-            long search_time=System.currentTimeMillis();
             String s = allWords.get(randInt(0, allWords.size() - 1));
-            patricia.search(patricia.getRoot(), s, s,"");
+            long search_time=System.currentTimeMillis();
+            ArrayList<Integer> result=patricia.search(patricia.getRoot(), s, s,"");
             long search_timeFinal=System.currentTimeMillis();
             total_search=+(search_timeFinal-search_time);
-            System.out.println("Buscar "+s+" demoro "+(search_timeFinal-search_time)+" milisegundos");
+            System.out.println("Buscar "+s+" demoro "+(search_timeFinal-search_time)+" milisegundos, resultados: "+result);
         }
         System.out.println("Buscar en total demoro: "+total_search);
         System.out.println("insertar demoro: "+ ( time_end - time_start ) +" milisegundos");
