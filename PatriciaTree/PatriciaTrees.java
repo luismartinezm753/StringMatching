@@ -8,9 +8,6 @@ import java.util.ArrayList;
  */
 public class PatriciaTrees {
     private Node root;
-
-
-
     public PatriciaTrees(){
 
         root=new Node();
@@ -25,7 +22,8 @@ public class PatriciaTrees {
      * @param position posicion de p en el arreglo de strings
      */
     public void insert(Node node, String p, String s, String path, int position){
-        if (node.isLeaf()) {
+        ArrayList<Edge> edges = node.getChildrenEdges();
+        if ( node.isLeaf()) {
             if (s.equals("")) {
                 node.addPosition(position);
             }
@@ -34,10 +32,14 @@ public class PatriciaTrees {
             }
             return;
         }
-        ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges){
             String label = edge.getLabel();
             String prefix = greatestCommonPrefix(label, s);
+            if (label.equals("") && path.equals(p)){
+                int index=edges.indexOf(edge);
+                node.getChildrenPosition(index).addPosition(position);
+                return;
+            }
             if (prefix.equals(""))
                 continue;
             if (!prefix.equals(label)){
@@ -57,7 +59,7 @@ public class PatriciaTrees {
         }
         String pathToLeaf = getPathToLeaf(node);
         String pPrime = path + pathToLeaf;
-        reinsert_aux(s, pPrime, position, root, "");
+        reinsert(s, pPrime, position);
     }
 
     private String getPathToLeaf(Node child) {
@@ -86,11 +88,6 @@ public class PatriciaTrees {
             else
                 return new ArrayList<Integer>();
         }
-        /*else{
-            if (p.equals(path))
-                return false;
-        }*/
-
         ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges){
             String label = edge.getLabel();
@@ -187,13 +184,6 @@ public class PatriciaTrees {
         }
         return a.substring(0, minLength);
     }
-    public void addFinalNode(Node node){
-        Node leaf = new Node();
-        Edge emptyEdge = new Edge("");
-        node.addEdge(emptyEdge);
-        node.addNode(leaf);
-    }
-
     public Node getRoot() {
         return root;
     }

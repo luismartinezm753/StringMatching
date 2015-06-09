@@ -73,7 +73,7 @@ public class Node {
     }
 
     public void replaceNode(int index, Node newNode){
-        children.set(index,newNode);
+        children.set(index, newNode);
     }
 
     public void removeEdge(int index){
@@ -86,6 +86,14 @@ public class Node {
 
     public void deletePosition(int position){
         positions.remove(position);
+    }
+
+    public boolean containsString(String s){
+        for(Edge edge : childrenEdges){
+            if (edge.getLabel().equals(s))
+                return true;
+        }
+        return false;
     }
 
 }
