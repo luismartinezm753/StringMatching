@@ -15,11 +15,11 @@ public class Main {
         int randomNum = rand.nextInt((max - min) + 1) + min;
         return randomNum;
     }
-    public static final int TICKS=5000;
+    public static final int TICKS=10000;
     static String[] SPECIAL_CHARS={"\\-,\\',\\,","\\.","\\:","\\;","\\{","\\}","\\[","\\]","\\!","\\¡","\\?","\\¿","\n","\\&","\\#","\\$"};
     public static void main(String[] args) throws IOException {
         PatriciaTrees patricia=new PatriciaTrees();
-        BufferedReader br = new BufferedReader(new FileReader("003ssb.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("Ingles/003ssb.txt"));
         String strLine;
         int i=0;
         ArrayList<String> allWords=new ArrayList<String>();
@@ -28,6 +28,7 @@ public class Main {
             strLine=strLine.replaceAll("[^\\w\\s]","");
             String[] words = strLine.split(" ");
             for(String word : words){
+                word += "$";
                 allWords.add(word);
             }
         }
@@ -35,10 +36,11 @@ public class Main {
         System.out.println("Inicio Insert");
         for (String s :allWords){
             if (i%TICKS==0)
-                System.out.println("LLevamos "+i+" Palabras");
+                System.err.println("LLevamos "+i+" Palabras");
             patricia.insert(patricia.getRoot(),s,s,"",i);
             i++;
         }
+        /*
         long time_end = System.currentTimeMillis();
         long total_search=System.currentTimeMillis();
         for (int j = 0; j < allWords.size() / 100; j++) {
@@ -47,10 +49,12 @@ public class Main {
             ArrayList<Integer> result=patricia.search(patricia.getRoot(), s, s,"");
             long search_timeFinal=System.currentTimeMillis();
             total_search=+(search_timeFinal-search_time);
-            System.out.println("Buscar " + s + " demoro " + (search_timeFinal - search_time) + " milisegundos, resultados: " + result);
+            //System.out.println("Buscar " + s + " demoro " + (search_timeFinal - search_time) + " milisegundos, resultados: " + result);
         }
         System.out.println("Buscar en total demoro: "+total_search);
-        System.out.println("insertar demoro: "+ ( time_end - time_start ) +" milisegundos");
+        System.out.println("insertar demoro: "+ ( time_end - time_start ) +" milisegundos");*/
         br.close();
+
+        System.out.println("the: " + patricia.search(patricia.getRoot(), "lannister$", "lannister$", "").size());
     }
 }

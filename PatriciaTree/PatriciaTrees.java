@@ -26,7 +26,6 @@ public class PatriciaTrees {
         if (node.isLeaf()) {
             if (s.equals("")) {
                 node.addPosition(position);
-                System.out.println(p);
             }
             else{
                 reinsert(p, path, position);
