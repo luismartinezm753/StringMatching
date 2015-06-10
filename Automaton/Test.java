@@ -43,6 +43,7 @@ public class Test {
         long totalConstructionTime = 0;
         long totalSearchTime = 0;
         int wordsToSearch = allWords.size() / 1000;
+        long start_time_construction, end_time_construction;
         System.err.println("Inicio automata");
         System.err.println("Palabras a buscar: " + allWords.size() / 1000);
         for (int j = 0; j < wordsToSearch; j++) {
@@ -50,11 +51,11 @@ public class Test {
                 System.err.println("Linea: " + j);
             }
             String s = allWords.get(randInt(0, allWords.size() - 1));
-            long start_time_construction = System.currentTimeMillis();
+            start_time_construction = System.currentTimeMillis();
             automaton = new Automaton(s);
-            long end_time_construction = System.currentTimeMillis();
-            totalConstructionTime += (end_time_construction - start_time_construction);
-            System.err.println("Construir automata " + s+ " : " + (end_time_construction - start_time_construction));
+            end_time_construction = System.currentTimeMillis();
+            totalConstructionTime += (end_time_construction - start_time_construction + 1) ;
+            System.out.println("Construir automata " + s+ " : " + (end_time_construction - start_time_construction));
 
             long startSearchTime = System.currentTimeMillis();
             automaton.search(text);
