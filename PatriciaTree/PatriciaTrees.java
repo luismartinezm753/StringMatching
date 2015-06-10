@@ -43,6 +43,7 @@ public class PatriciaTrees {
                 return;
             }
             */
+            /*
             if (prefix.equals(label)){
                 int index = edges.indexOf(edge);
                 path = path + label;
@@ -57,10 +58,9 @@ public class PatriciaTrees {
                 reinsert(p, pPrime, position);
                 return;
             }
+            */
 
-
-            /*
-            if (prefix.equals("") && !s.equals(""))
+            if (prefix.equals(""))
                 continue;
             if (!prefix.equals(label)){
                 int index = edges.indexOf(edge);
@@ -76,11 +76,11 @@ public class PatriciaTrees {
                 insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
                 return;
             }
-            */
+
         }
         String pathToLeaf = getPathToLeaf(node);
         String pPrime = path + pathToLeaf;
-        reinsert(s, pPrime, position);
+        reinsert(p, pPrime, position);
     }
 
     private String getPathToLeaf(Node child) {
@@ -182,6 +182,7 @@ public class PatriciaTrees {
                 newNode.addEdge(newEdge);
                 newNode2.addPosition(position);
                 insert=true;
+                break;
             }else{
                 /*Bajar*/
                 insert=true;
