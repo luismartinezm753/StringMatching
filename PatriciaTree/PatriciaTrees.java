@@ -23,7 +23,7 @@ public class PatriciaTrees {
      */
     public void insert(Node node, String p, String s, String path, int position){
         ArrayList<Edge> edges = node.getChildrenEdges();
-        if ( node.isLeaf()) {
+        if (node.isLeaf()) {
             if (s.equals("")) {
                 node.addPosition(position);
             }
@@ -35,11 +35,11 @@ public class PatriciaTrees {
         for (Edge edge: edges){
             String label = edge.getLabel();
             String prefix = greatestCommonPrefix(label, s);
-            if (label.equals("") && path.equals(p)){
+            /*if (label.equals("") && path.equals(p)){
                 int index=edges.indexOf(edge);
                 node.getChildrenPosition(index).addPosition(position);
                 return;
-            }
+            }*/
             if (prefix.equals(""))
                 continue;
             if (!prefix.equals(label)){
@@ -59,7 +59,7 @@ public class PatriciaTrees {
         }
         String pathToLeaf = getPathToLeaf(node);
         String pPrime = path + pathToLeaf;
-        reinsert(s, pPrime, position);
+        reinsert_aux(s, pPrime, position, root, "");
     }
 
     private String getPathToLeaf(Node child) {
