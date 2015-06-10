@@ -77,8 +77,8 @@ public class Main {
             System.out.println("Palabras insertadas: " + wordsSize);
             long insertionTime = (time_end - time_start);
             long insertionTimePerWord = insertionTime / wordsSize;
-            System.out.println("Tiempo de inserción total: " + insertionTime + "milisegundos");
-            System.out.println("Tiempo de inserción por palabra: " + insertionTimePerWord + "milisegundos");
+            System.out.println("Tiempo de insercion total: " + insertionTime + "milisegundos");
+            System.out.println("Tiempo de insercion por palabra: " + insertionTimePerWord + "milisegundos");
 
             System.out.println("Palabras buscadas: " + wordsToSearch);
             long searchTime = (end_search - start_search);
