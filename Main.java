@@ -22,7 +22,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new FileReader("003ssb.txt"));
         String strLine;
         int i=0;
-        ArrayList<String> allWords=new ArrayList<>();
+        ArrayList<String> allWords=new ArrayList<String>();
         while ((strLine = br.readLine()) != null) {
             strLine=strLine.toLowerCase();
             strLine=strLine.replaceAll("[^\\w\\s]","");

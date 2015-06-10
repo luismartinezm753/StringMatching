@@ -26,6 +26,7 @@ public class PatriciaTrees {
         if (node.isLeaf()) {
             if (s.equals("")) {
                 node.addPosition(position);
+                System.out.println(p);
             }
             else{
                 reinsert(p, path, position);
@@ -35,12 +36,31 @@ public class PatriciaTrees {
         for (Edge edge: edges){
             String label = edge.getLabel();
             String prefix = greatestCommonPrefix(label, s);
-            /*if (label.equals("") && path.equals(p)){
+            /*
+            if (label.equals("") && path.equals(p)){
                 int index=edges.indexOf(edge);
                 node.getChildrenPosition(index).addPosition(position);
                 return;
-            }*/
-            if (prefix.equals(""))
+            }
+            */
+            if (prefix.equals(label)){
+                int index = edges.indexOf(edge);
+                path = path + label;
+                insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
+                return;
+            }
+            else if (!prefix.equals(label) && !prefix.equals("")){
+                int index = edges.indexOf(edge);
+                Node child = node.getChildrenPosition(index);
+                String pathToLeaf = getPathToLeaf(child);
+                String pPrime = path + edge.getLabel() + pathToLeaf;
+                reinsert(p, pPrime, position);
+                return;
+            }
+
+
+            /*
+            if (prefix.equals("") && !s.equals(""))
                 continue;
             if (!prefix.equals(label)){
                 int index = edges.indexOf(edge);
@@ -56,10 +76,11 @@ public class PatriciaTrees {
                 insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
                 return;
             }
+            */
         }
         String pathToLeaf = getPathToLeaf(node);
         String pPrime = path + pathToLeaf;
-        reinsert_aux(s, pPrime, position, root, "");
+        reinsert(s, pPrime, position);
     }
 
     private String getPathToLeaf(Node child) {
@@ -168,7 +189,7 @@ public class PatriciaTrees {
             }
         }
         if (!insert){
-            Edge newEdge=new Edge(prefix);
+            Edge newEdge=new Edge(sufix);
             Node newNode= new Node();
             newNode.addPosition(position);
             node.addEdge(newEdge);

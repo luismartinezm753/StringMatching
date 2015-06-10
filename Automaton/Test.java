@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by milenkotomic on 02-06-15.
@@ -42,6 +44,9 @@ public class Test {
         Automaton automaton = new Automaton(" ");
         long totalConstructionTime = 0;
         long totalSearchTime = 0;
+        Set<String> set = new HashSet<String>();
+        set.addAll(allWords);
+        System.out.println(set.size());
         int wordsToSearch = allWords.size() / 1000;
         long start_time_construction, end_time_construction;
         System.err.println("Inicio automata");
