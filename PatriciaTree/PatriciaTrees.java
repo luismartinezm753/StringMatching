@@ -1,5 +1,8 @@
 package PatriciaTree;
 
+import SuffixTrie.CompactCharSequence;
+
+import java.io.IOException;
 import java.lang.String;
 import java.util.ArrayList;
 
@@ -14,19 +17,17 @@ public class PatriciaTrees {
     }
 
     /**
-     *
-     * @param node nodo que se esta visitando
+     *  @param node nodo que se esta visitando
      * @param p string completo a insertar
      * @param s substring de p que queda por buscar
      * @param path string que se ha formado en el recorrido del arbol
      * @param position posicion de p en el arreglo de strings
      */
-    public void insert(Node node, String p, String s, String path, int position){
+    public void insert(Node node, CompactCharSequence p, CompactCharSequence s, CompactCharSequence path, int position) throws IOException {
         ArrayList<Edge> edges = node.getChildrenEdges();
         if (node.isLeaf()) {
-            if (s.equals("")) {
+            if (s.compareTo("")==0) {
                 node.addPosition(position);
-                System.out.println(p);
             }
             else{
                 reinsert(p, path, position);
@@ -34,52 +35,32 @@ public class PatriciaTrees {
             return;
         }
         for (Edge edge: edges){
-            String label = edge.getLabel();
-            String prefix = greatestCommonPrefix(label, s);
-            /*
-            if (label.equals("") && path.equals(p)){
-                int index=edges.indexOf(edge);
-                node.getChildrenPosition(index).addPosition(position);
-                return;
-            }
-            */
-            /*
-            if (prefix.equals(label)){
-                int index = edges.indexOf(edge);
-                path = path + label;
-                insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
-                return;
-            }
-            else if (!prefix.equals(label) && !prefix.equals("")){
-                int index = edges.indexOf(edge);
-                Node child = node.getChildrenPosition(index);
-                String pathToLeaf = getPathToLeaf(child);
-                String pPrime = path + edge.getLabel() + pathToLeaf;
-                reinsert(p, pPrime, position);
-                return;
-            }
-            */
+            CompactCharSequence label = (CompactCharSequence) edge.getLabel();
+            CompactCharSequence prefix = greatestCommonPrefix(label, s);
 
-            if (prefix.equals(""))
+            if (prefix.compareTo("")==0)
                 continue;
-            if (!prefix.equals(label)){
+            if (prefix.compareTo(label)!=0){
                 int index = edges.indexOf(edge);
                 Node child = node.getChildrenPosition(index);
                 String pathToLeaf = getPathToLeaf(child);
-                String pPrime = path + edge.getLabel() + pathToLeaf;
+                //CompactCharSequence pPrime = path + edge.getLabel() + new CompactCharSequence(pathToLeaf);
+                CompactCharSequence pPrime= (CompactCharSequence) path.append(edge.getLabel()).append(new CompactCharSequence(pathToLeaf));
                 reinsert(p, pPrime, position);
                 return;
             }
             else{
                 int index = edges.indexOf(edge);
-                path = path + label;
-                insert(node.getChildrenPosition(index), p,s.substring(prefix.length(), s.length()), path, position);
+                //path = path + label;
+                path= (CompactCharSequence) path.append(label);
+                insert(node.getChildrenPosition(index), p, (CompactCharSequence) s.subSequence(prefix.length(), s.length()), path, position);
                 return;
             }
 
         }
         String pathToLeaf = getPathToLeaf(node);
-        String pPrime = path + pathToLeaf;
+        //CompactCharSequence pPrime = path + new CompactCharSequence(pathToLeaf);
+        CompactCharSequence pPrime= (CompactCharSequence) path.append(new CompactCharSequence(pathToLeaf));
         reinsert(p, pPrime, position);
     }
 
@@ -102,25 +83,25 @@ public class PatriciaTrees {
      * @param path string que se ha formado al recorrer el arbol
      * @return true si al llegar a una hoja path es igual a p
      */
-    public ArrayList<Integer> search(Node node, String p, String s, String path){
+    public ArrayList<Integer> search(Node node, CompactCharSequence p, CompactCharSequence s, CompactCharSequence path) throws IOException {
         if (node.isLeaf()){
-            if (p.equals(path))
+            if (p.compareTo(path)==0)
                 return node.getPositions();
             else
                 return new ArrayList<Integer>();
         }
         ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges){
-            String label = edge.getLabel();
-            String prefix = greatestCommonPrefix(label, s);
-            if (prefix.equals(label)) {
+            CharSequence label = edge.getLabel();
+            CompactCharSequence prefix = greatestCommonPrefix((CompactCharSequence)label, s);
+            if (prefix.compareTo(label)==0) {
                 int index = edges.indexOf(edge);
                 Node child = node.getChildrenPosition(index);
-                s = s.substring(prefix.length(), s.length());
-                path = path + label;
+                s =(CompactCharSequence) s.subSequence(prefix.length(), s.length());
+                path = (CompactCharSequence) path.append(label);
                 return search(child, p, s, path);
             }
-            if (prefix.equals(""))
+            if (prefix.compareTo("")==0)
                 continue;
 
             /*else{
@@ -130,15 +111,15 @@ public class PatriciaTrees {
         return new ArrayList<Integer>();
 
     }
-    public void reinsert(String p, String pPrime, int position){
-        String prefix=greatestCommonPrefix(p, pPrime);
-        String sufix=p.substring(prefix.length(), p.length());
-        reinsert_aux(prefix,sufix,position,root,"");
+    public void reinsert(CompactCharSequence p, CompactCharSequence pPrime, int position) throws IOException {
+        CompactCharSequence prefix=greatestCommonPrefix(p, pPrime);
+        CompactCharSequence sufix= (CompactCharSequence) p.subSequence(prefix.length(), p.length());
+        reinsert_aux(p,sufix,position,root,new CompactCharSequence(""));
 
     }
 
 
-    public void reinsert_aux(String prefix, String sufix, int position, Node node, String acumulado){
+    public void reinsert_aux(CharSequence prefix, CompactCharSequence sufix, int position, Node node, Appendable acumulado) throws IOException {
         boolean insert=false;
         if (node.isLeaf()){
             Edge newEdge=new Edge(sufix);
@@ -147,7 +128,7 @@ public class PatriciaTrees {
             node.addEdge(newEdge);
             node.addNode(newNode);
             insert=true;
-            if (!sufix.equals("") && !acumulado.equals("")){
+            if (!sufix.equals(new CompactCharSequence("")) && !acumulado.equals(new CompactCharSequence(""))){
                 Edge finalEdge=new Edge("");
                 Node finalNode=new Node();
                 node.addEdge(finalEdge);
@@ -157,18 +138,18 @@ public class PatriciaTrees {
             node.setPositions(new ArrayList<Integer>());
             return;
         }
-        String labelPrefix="";
+        CompactCharSequence labelPrefix;
         ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges) {
-            String label = edge.getLabel();
-            labelPrefix = greatestCommonPrefix(label, prefix);
-            if (labelPrefix.equals("")){
+            CharSequence label = edge.getLabel();
+            labelPrefix = greatestCommonPrefix((CompactCharSequence)label, (CompactCharSequence) prefix);
+            if (labelPrefix.equals(new CompactCharSequence(""))){
                 continue;
             }
             if (!labelPrefix.equals(label)){
                 /*Hacer Split*/
-                String prefixP=greatestCommonPrefix(label, prefix);
-                String endLabel=label.substring(prefixP.length(),label.length());
+                CompactCharSequence prefixP=greatestCommonPrefix((CompactCharSequence)label, (CompactCharSequence) prefix);
+                CompactCharSequence endLabel= (CompactCharSequence) label.subSequence(prefixP.length(), label.length());
                 Node newNode=new Node();
                 Node newNode2=new Node();
                 Node child=node.getChildrenPosition(edges.indexOf(edge));
@@ -186,7 +167,7 @@ public class PatriciaTrees {
             }else{
                 /*Bajar*/
                 insert=true;
-                reinsert_aux(prefix.substring(label.length(), prefix.length()), sufix, position, node.getChildrenPosition(edges.indexOf(edge)), acumulado.concat(label));
+                reinsert_aux(prefix.subSequence(label.length(), prefix.length()), sufix, position, node.getChildrenPosition(edges.indexOf(edge)), acumulado.append(label));
             }
         }
         if (!insert){
@@ -197,14 +178,16 @@ public class PatriciaTrees {
             node.addNode(newNode);
         }
     }
-    public String greatestCommonPrefix(String a, String b) {
+    public CompactCharSequence greatestCommonPrefix(CompactCharSequence a, CompactCharSequence b) {
         int minLength = Math.min(a.length(), b.length());
         for (int i = 0; i < minLength; i++) {
             if (a.charAt(i) != b.charAt(i)) {
-                return a.substring(0, i);
+                //return a.substring(0, i);
+                return (CompactCharSequence) a.subSequence(0,i);
             }
         }
-        return a.substring(0, minLength);
+        return (CompactCharSequence) a.subSequence(0,minLength);
+        //return a.substring(0, minLength);
     }
     public Node getRoot() {
         return root;

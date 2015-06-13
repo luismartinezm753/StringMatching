@@ -88,12 +88,5 @@ public class Node {
         positions.remove(position);
     }
 
-    public boolean containsString(String s){
-        for(Edge edge : childrenEdges){
-            if (edge.getLabel().equals(s))
-                return true;
-        }
-        return false;
-    }
 
 }

@@ -1,19 +1,21 @@
+
 package SuffixTrie;
 
 import PatriciaTree.Edge;
 import PatriciaTree.Node;
 import PatriciaTree.PatriciaTrees;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
  * Created by luism on 16-05-15.
  */
+
 public class SuffixTrie extends PatriciaTrees{
-    //Node root;
+    public static final int TICKS=5000;
     Node lastMark;
     ArrayList<SuffixLinks> links;
-    public static final char SPECIAL_CHAR='$';
     public SuffixTrie(){
         super();
         lastMark=getRoot();
@@ -38,8 +40,11 @@ public class SuffixTrie extends PatriciaTrees{
     public void setLastMark(Node lastMark) {
         this.lastMark = lastMark;
     }
+    public boolean searchTrie(Node node, CompactCharSequence p, CompactCharSequence s, CompactCharSequence path){
+        return false;
+    }
     @Override
-    public void reinsert_aux(String prefix, String sufix, int position, Node node, String acumulado){
+    public void reinsert_aux(CharSequence prefix, CompactCharSequence sufix, int position, Node node, Appendable acumulado) throws IOException {
         boolean insert=false;
         if (node.isLeaf()){
             Edge newEdge=new Edge(sufix);
@@ -48,7 +53,7 @@ public class SuffixTrie extends PatriciaTrees{
             node.addEdge(newEdge);
             node.addNode(newNode);
             insert=true;
-            if (!sufix.equals("") && !acumulado.equals("")){
+            if (!sufix.equals(new CompactCharSequence("")) && !acumulado.equals(new CompactCharSequence(""))){
                 Edge finalEdge=new Edge("");
                 Node finalNode=new Node();
                 node.addEdge(finalEdge);
@@ -61,18 +66,18 @@ public class SuffixTrie extends PatriciaTrees{
             setLastMark(node);
             return;
         }
-        String labelPrefix="";
+        CompactCharSequence labelPrefix;
         ArrayList<Edge> edges = node.getChildrenEdges();
         for (Edge edge: edges) {
-            String label = edge.getLabel();
-            labelPrefix = greatestCommonPrefix(label, prefix);
-            if (labelPrefix.equals("")){
+            CharSequence label = edge.getLabel();
+            labelPrefix = greatestCommonPrefix((CompactCharSequence)label, (CompactCharSequence)prefix);
+            if (labelPrefix.equals(new CompactCharSequence(""))){
                 continue;
             }
             if (!labelPrefix.equals(label)){
                 /*Hacer Split*/
-                String prefixP=greatestCommonPrefix(label, prefix);
-                String endLabel=label.substring(prefixP.length(),label.length());
+                CompactCharSequence prefixP=greatestCommonPrefix((CompactCharSequence)label, (CompactCharSequence)prefix);
+                CharSequence endLabel=label.subSequence(prefixP.length(), label.length());
                 Node newNode=new Node();
                 Node newNode2=new Node();
                 Node child= node.getChildrenPosition(edges.indexOf(edge));
@@ -87,9 +92,9 @@ public class SuffixTrie extends PatriciaTrees{
                 newNode2.addPosition(position);
                 insert=true;
             }else{
-                /*Bajar*/
+            /*Bajar*/
                 insert=true;
-                reinsert_aux(prefix.substring(label.length(), prefix.length()), sufix, position, node.getChildrenPosition(edges.indexOf(edge)), acumulado.concat(label));
+                reinsert_aux(prefix.subSequence(label.length(), prefix.length()), sufix, position, node.getChildrenPosition(edges.indexOf(edge)), acumulado.append(label));
             }
         }
         if (!insert){
@@ -105,12 +110,24 @@ public class SuffixTrie extends PatriciaTrees{
          * @param s string
          * @return un lista con todos los sufijos de s
          */
-    public ArrayList<String> generateSuffix(String s){
-        ArrayList<String> suffixes=new ArrayList<String>();
-        for (int i = s.length()-1; i >=0; i--) {
-            String sufix=s.substring(i,s.length());
-            suffixes.add(sufix);
+    public ArrayList<CompactCharSequence> generateSuffix(String s){
+        ArrayList<CompactCharSequence> suffixes=new ArrayList<CompactCharSequence>();
+        CompactCharSequence sequence=new CompactCharSequence(s);
+        int length=sequence.length();
+        CompactCharSequence subSequence;
+        int j=0;
+        for (int i = length-1; i >=0; i--) {
+            if (j%TICKS==0)
+                System.out.println("LLevamos "+j+" Palabras");
+            subSequence= (CompactCharSequence) sequence.subSequence(i,length);
+            try {
+                suffixes.add((CompactCharSequence)subSequence.append(new CompactCharSequence("$")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            j++;
         }
         return suffixes;
     }
 }
+
