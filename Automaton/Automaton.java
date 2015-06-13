@@ -13,7 +13,7 @@ public class Automaton {
     public Automaton(String pattern){
         // this.sigma = createSigma(pattern);
         this.sigma = new ArrayList<String>();
-        char[] alphabet = "abcdefghijklmnñopqrstuvwxyz 1234567890".toCharArray();
+        char[] alphabet = "abcdefghijklmnopqrstuvwxyz 1234567890".toCharArray();
         for (char c: alphabet){
             this.sigma.add((Character.toString(c)));
         }
