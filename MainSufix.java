@@ -29,7 +29,7 @@ public class MainSufix {
             strLine=strLine.replaceAll("[^\\w\\s]","");
             String[] words = strLine.split(" ");
             for(String word : words){
-                allWords.add(new CompactCharSequence(word+"$"));
+                allWords.add(new CompactCharSequence(word));
             }
             all=all+strLine;
         }
@@ -49,14 +49,13 @@ public class MainSufix {
         for (int j = 0; j < allWords.size() / 10; j++) {
             CompactCharSequence s = allWords.get(randInt(0, allWords.size() - 1));
             long search_time=System.currentTimeMillis();
-            ArrayList<Integer> result=suffixTrie.search(suffixTrie.getRoot(), s, s,new CompactCharSequence(""));
+            boolean result=suffixTrie.searchTrie(suffixTrie.getRoot(), s, s, new CompactCharSequence(""));
             long search_timeFinal=System.currentTimeMillis();
             total_search=+(search_timeFinal-search_time);
             System.out.println("Buscar " + s + " demoro " + (search_timeFinal - search_time) + " milisegundos, resultados: " + result);
-            if (result.isEmpty()){
+            if (!result){
                 vacios++;
             }
-
         }
         System.out.println("Buscar en total demoro: "+total_search);
         System.out.println("insertar demoro: "+ ( time_end - time_start ) +" milisegundos");

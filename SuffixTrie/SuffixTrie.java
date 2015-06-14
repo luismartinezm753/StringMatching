@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class SuffixTrie extends PatriciaTrees{
     public static final int TICKS=5000;
+    public static final CompactCharSequence specialChar = new CompactCharSequence("$");
     Node lastMark;
     ArrayList<SuffixLinks> links;
     public SuffixTrie(){
@@ -40,7 +41,32 @@ public class SuffixTrie extends PatriciaTrees{
     public void setLastMark(Node lastMark) {
         this.lastMark = lastMark;
     }
-    public boolean searchTrie(Node node, CompactCharSequence p, CompactCharSequence s, CompactCharSequence path){
+    public boolean searchTrie(Node node, CompactCharSequence p, CompactCharSequence s, CompactCharSequence path) throws IOException {
+        if (node.isLeaf()){
+            if (p.compareTo(path)==0)
+                return true;
+            else
+                return false;
+        }
+        ArrayList<Edge> edges = node.getChildrenEdges();
+        for (Edge edge: edges){
+            CharSequence label = edge.getLabel();
+            CompactCharSequence prefix = greatestCommonPrefix((CompactCharSequence)label, s);
+            if (prefix.compareTo("")==0)
+                continue;
+            if (prefix.compareTo(label)==0) {
+                int index = edges.indexOf(edge);
+                Node child = node.getChildrenPosition(index);
+                s =(CompactCharSequence) s.subSequence(prefix.length(), s.length());
+                path = (CompactCharSequence) path.append(label);
+                if (path.equals(p)){
+                    return true;
+                }
+                return searchTrie(child, p, s, path);
+            }else if(((CompactCharSequence) label).startsWith(s)){
+                return true;
+            }
+        }
         return false;
     }
     @Override
@@ -120,11 +146,8 @@ public class SuffixTrie extends PatriciaTrees{
             if (j%TICKS==0)
                 System.out.println("LLevamos "+j+" Palabras");
             subSequence= (CompactCharSequence) sequence.subSequence(i,length);
-            try {
-                suffixes.add((CompactCharSequence)subSequence.append(new CompactCharSequence("$")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            //CompactCharSequence temp=(CompactCharSequence)subSequence.append(specialChar);
+            suffixes.add(subSequence);
             j++;
         }
         return suffixes;

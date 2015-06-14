@@ -3,6 +3,10 @@ package SuffixTrie;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 /**
  * Created by luism on 10-06-15.
@@ -81,9 +85,38 @@ public class CompactCharSequence implements CharSequence, Serializable, Comparab
 
     @Override
     public Appendable append(CharSequence charSequence) throws IOException {
-        StringBuilder builder=new StringBuilder(this);
+        /*StringBuilder builder=new StringBuilder(this);
         builder.append(charSequence);
-        return new CompactCharSequence(builder.toString());
+        return new CompactCharSequence(builder.toString());*/
+        char[] chars=new char[charSequence.length()];
+        char[] thisChars=new char[this.length()];
+        for (int i = 0; i < charSequence.length(); i++) {
+            chars[i]=charSequence.charAt(i);
+        }
+        for (int i = 0; i < this.length(); i++) {
+            thisChars[i]=this.charAt(i);
+        }
+        byte[] bytes = toBytes(chars);
+        byte[] data=toBytes(thisChars);
+        byte[] newData=concat(data,bytes);
+        return new CompactCharSequence(newData,0,newData.length);
+    }
+    public byte[] concat(byte[] a, byte[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+        byte[] c= new byte[aLen+bLen];
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+        return c;
+    }
+    private byte[] toBytes(char[] chars) {
+        CharBuffer charBuffer = CharBuffer.wrap(chars);
+        ByteBuffer byteBuffer = Charset.forName("ISO-8859-1").encode(charBuffer);
+        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(),
+                byteBuffer.position(), byteBuffer.limit());
+        Arrays.fill(charBuffer.array(), '\u0000'); // clear sensitive data
+        Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+        return bytes;
     }
 
     @Override
@@ -101,5 +134,18 @@ public class CompactCharSequence implements CharSequence, Serializable, Comparab
             return this.compareTo(s)==0;
         }
         return false;
+    }
+    public boolean startsWith(CharSequence sequence){
+
+        for (int i = 0; i < sequence.length(); i++) {
+            if (this.charAt(i)!=sequence.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public byte[] getData() {
+        return data;
     }
 }
