@@ -144,7 +144,7 @@ public class SuffixTrie extends PatriciaTrees{
         int j=0;
         for (int i = length-1; i >=0; i--) {
             if (j%TICKS==0)
-                System.out.println("LLevamos "+j+" Palabras");
+                System.err.println("LLevamos "+j+" Palabras");
             subSequence= (CompactCharSequence) sequence.subSequence(i,length);
             //CompactCharSequence temp=(CompactCharSequence)subSequence.append(specialChar);
             suffixes.add(subSequence);
