@@ -27,7 +27,7 @@ public class Main {
 
         for (String book: books) {
             SuffixTrie suffixTrie = new SuffixTrie();
-            BufferedReader br = new BufferedReader(new FileReader("Ingles/003ssb.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(book));
             String strLine;
             int i = 0;
             ArrayList<CompactCharSequence> allWords = new ArrayList<CompactCharSequence>();
@@ -65,7 +65,7 @@ public class Main {
             System.err.println("Inicio busqueda");
             int vacios = 0;
             int wordsToSearch = allWords.size() / 10;
-            long total_search = System.currentTimeMillis();
+            long total_search = 0;
             for (int j = 0; j < wordsToSearch; j++) {
                 if (j % TICKS == 0)
                     System.err.println("Buscadas " + j + " palabras de " + wordsToSearch);
@@ -73,7 +73,7 @@ public class Main {
                 long search_time = System.currentTimeMillis();
                 boolean result = suffixTrie.searchTrie(suffixTrie.getRoot(), s, s, new CompactCharSequence(""));
                 long search_timeFinal = System.currentTimeMillis();
-                total_search = +(search_timeFinal - search_time);
+                total_search += (search_timeFinal - search_time);
                 if (!result) {
                     vacios++;
                 }
